@@ -1,93 +1,615 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Tokos | W&T Offshore RFQ Advisor</title>
-  <style>
-    body { font-family: Arial, sans-serif; margin: 0; display: flex; height: 100vh; background-color: #f5f6fa; }
-    .chat-panel { width: 60%; padding: 1rem; overflow-y: auto; border-right: 1px solid #ccc; display: flex; flex-direction: column; }
-    .chat-log { flex: 1; overflow-y: auto; }
-    .chat-log p { margin: 0.5rem 0; }
-    .chat-input { display: flex; margin-top: 1rem; }
-    .chat-input input { flex: 1; padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px; }
-    .chat-input button { margin-left: 0.5rem; padding: 0.5rem 1rem; }
-    .artifact-panel { width: 40%; padding: 1rem; background: white; }
-    .artifact-header { font-weight: bold; font-size: 1.2rem; margin-bottom: 1rem; }
-    .field { margin-bottom: 1rem; }
-    .field label { display: block; font-weight: bold; margin-bottom: 0.25rem; }
-    .field input, .field textarea { width: 100%; padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px; }
-    .savings-banner { width: 100%; background-color: #44bd32; color: white; text-align: center; padding: 1rem; font-weight: bold; font-size: 1rem; }
-    .export-btn { margin-top: 1rem; padding: 0.5rem; width: 100%; background: #273c75; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tokos | AI Debt Capital Advisor | W&T Offshore</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@300;400;600;700&display=swap');
+
+        :root {
+            --background-color: #121212;
+            --surface-color: #1e1e1e;
+            --primary-color: #4CAF50; /* A professional green */
+            --primary-light: #68b86b;
+            --text-primary: #EAEAEA;
+            --text-secondary: #B0B0B0;
+            --border-color: #333333;
+            --font-family: 'Source Sans 3', sans-serif;
+        }
+
+        body {
+            font-family: var(--font-family);
+            background-color: var(--background-color);
+            color: var(--text-primary);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .savings-hook {
+            background-color: var(--primary-color);
+            color: white;
+            text-align: center;
+            padding: 12px 20px;
+            font-size: 1.1em;
+            font-weight: 600;
+            flex-shrink: 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .main-container {
+            display: flex;
+            flex-grow: 1;
+            overflow: hidden;
+        }
+
+        .chat-container {
+            width: 55%;
+            display: flex;
+            flex-direction: column;
+            border-right: 1px solid var(--border-color);
+        }
+
+        .chat-window {
+            flex-grow: 1;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chat-message {
+            max-width: 85%;
+            padding: 12px 18px;
+            border-radius: 18px;
+            margin-bottom: 15px;
+            line-height: 1.5;
+            font-size: 1em;
+        }
+
+        .tokos-message {
+            background-color: var(--surface-color);
+            color: var(--text-primary);
+            align-self: flex-start;
+            border-bottom-left-radius: 4px;
+        }
+
+        .user-message {
+            background-color: var(--primary-color);
+            color: white;
+            align-self: flex-end;
+            border-bottom-right-radius: 4px;
+        }
+
+        .chat-input-area {
+            padding: 20px;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            background-color: var(--background-color);
+        }
+
+        #userInput {
+            flex-grow: 1;
+            background-color: var(--surface-color);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 10px 20px;
+            color: var(--text-primary);
+            font-size: 1em;
+            outline: none;
+        }
+
+        #userInput:focus {
+            border-color: var(--primary-color);
+        }
+        
+        #sendButton {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            margin-left: 10px;
+            cursor: pointer;
+            font-size: 1.2em;
+            transition: background-color 0.2s;
+        }
+
+        #sendButton:hover {
+            background-color: var(--primary-light);
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .action-button {
+            background-color: transparent;
+            border: 1px solid var(--primary-color);
+            color: var(--primary-color);
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .action-button:hover {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+
+        .artifact-container {
+            width: 45%;
+            padding: 30px;
+            overflow-y: auto;
+            background-color: var(--surface-color);
+        }
+
+        .rfq-header {
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        .rfq-header h1 {
+            margin: 0;
+            font-size: 1.8em;
+            color: var(--text-primary);
+        }
+
+        .rfq-header p {
+            margin: 5px 0 0;
+            color: var(--text-secondary);
+            font-size: 1em;
+        }
+        
+        .rfq-section {
+            margin-bottom: 25px;
+        }
+
+        .rfq-section h2 {
+            font-size: 1.1em;
+            color: var(--primary-color);
+            margin-bottom: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .rfq-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .rfq-item-label {
+            font-weight: 400;
+            color: var(--text-secondary);
+        }
+
+        .rfq-item-value {
+            font-weight: 600;
+            color: var(--text-primary);
+            text-align: right;
+            transition: all 0.3s ease-in-out;
+        }
+        
+        .highlight-update {
+            background-color: rgba(76, 175, 80, 0.2);
+            animation: glow 1.5s ease-out;
+        }
+        
+        @keyframes glow {
+            from {
+                background-color: rgba(76, 175, 80, 0.4);
+            }
+            to {
+                background-color: transparent;
+            }
+        }
+        
+        .notes-section {
+            white-space: pre-wrap;
+            background: var(--background-color);
+            padding: 15px;
+            border-radius: 6px;
+            min-height: 50px;
+        }
+
+    </style>
 </head>
 <body>
-  <div class="chat-panel">
-    <div class="savings-banner">
-      Based on our review of your outstanding 10.75% Senior Second Lien Notes due 2029, and changes in the current debt capital markets, we believe you can save $2.1M per month in interest expense by refinancing to a lower rate.
-    </div>
-    <div class="chat-log" id="chatLog">
-      <p><strong>Tokos:</strong> Greetings. I'm Tokos, your AI-powered partner in corporate debt strategy. Am I speaking with the CFO of W&T Offshore?</p>
-    </div>
-    <div class="chat-input">
-      <input type="text" id="userInput" placeholder="Type your response..." />
-      <button onclick="processInput()">Send</button>
-    </div>
-  </div>
-  <div class="artifact-panel">
-    <div class="artifact-header">Refinancing RFQ (Strawman)</div>
-    <div class="field"><label>Borrower</label><input id="borrower" value="W&T Offshore, Inc. (NYSE: WTI)" disabled /></div>
-    <div class="field"><label>Purpose of Loan</label><input id="purpose" value="Refinance 10.75% Senior Second Lien Notes due 2029" /></div>
-    <div class="field"><label>Loan Amount</label><input id="amount" value="$500,000,000" /></div>
-    <div class="field"><label>Proposed Interest Rate</label><input id="rate" value="8.00% (subject to market feedback)" /></div>
-    <div class="field"><label>Maturity</label><input id="maturity" value="December 2029 (unchanged)" /></div>
-    <div class="field"><label>Seniority</label><input id="seniority" value="Second Lien (subordinated to RBL facility)" /></div>
-    <div class="field"><label>Notes from Borrower</label><textarea id="notes" rows="4" placeholder="Add any borrower preferences or custom terms..."></textarea></div>
-    <button class="export-btn" onclick="exportRFQ()">Export RFQ</button>
-  </div>
 
-  <script>
-    function processInput() {
-      const input = document.getElementById('userInput');
-      const chat = document.getElementById('chatLog');  
-      const msg = input.value.trim();
-      if (!msg) return;
-      const userLine = document.createElement('p');
-      userLine.innerHTML = `<strong>You:</strong> ${msg}`;
-      chat.appendChild(userLine);
-      input.value = '';
-      const botLine = document.createElement('p');
-      botLine.innerHTML = `<strong>Tokos:</strong> Thank you. My purpose today is to align with you on a Request for Proposal to refinance your term loan, ideally at materially lower cost. The benefit is measurable: improved cash flows, stronger ratios, and a better bottom line. Should we proceed on that basis?`;
-      setTimeout(() => chat.appendChild(botLine), 500);
-      chat.scrollTop = chat.scrollHeight;
+    <div class="savings-hook">
+        Based on our review of your outstanding Second Lien Term Loan, and changes in the current debt capital markets, we believe you can save over $550,000 per month in interest expense by refinancing to a lower rate.
+    </div>
+
+    <div class="main-container">
+        <div class="chat-container">
+            <div class="chat-window" id="chatWindow">
+                </div>
+            <div class="chat-input-area">
+                <input type="text" id="userInput" placeholder="Type your message..." autocomplete="off">
+                <button id="sendButton" title="Send">➤</button>
+            </div>
+        </div>
+
+        <div class="artifact-container">
+            <div class="rfq-header">
+                <h1>Request for Proposal</h1>
+                <p>Term Loan Refinancing</p>
+            </div>
+
+            <div class="rfq-section">
+                <h2>BORROWER INFORMATION</h2>
+                <div class="rfq-item">
+                    <span class="rfq-item-label">Company</span>
+                    <span class="rfq-item-value">W&T Offshore, Inc. (NYSE: WTI)</span>
+                </div>
+                <div class="rfq-item">
+                    <span class="rfq-item-label">CFO Contact</span>
+                    <span class="rfq-item-value">Janet Yang</span>
+                </div>
+                <div class="rfq-item">
+                    <span class="rfq-item-label">Industry</span>
+                    <span class="rfq-item-value">Oil & Gas E&P</span>
+                </div>
+                 <div class="rfq-item">
+                    <span class="rfq-item-label">Date</span>
+                    <span class="rfq-item-value">July 2, 2025</span>
+                </div>
+            </div>
+
+            <div class="rfq-section">
+                <h2>PROPOSED TERMS</h2>
+                <div class="rfq-item">
+                    <span class="rfq-item-label">Loan Summary / Purpose</span>
+                    <span id="rfq-purpose" class="rfq-item-value">Refinance existing $200.0M second-lien term loan due 2026.</span>
+                </div>
+                <div class="rfq-item">
+                    <span class="rfq-item-label">Facility Type</span>
+                    <span id="rfq-type" class="rfq-item-value">Senior Secured Term Loan</span>
+                </div>
+                <div class="rfq-item">
+                    <span class="rfq-item-label">Proposed Loan Amount</span>
+                    <span id="rfq-amount" class="rfq-item-value">$200,000,000</span>
+                </div>
+                <div class="rfq-item">
+                    <span class="rfq-item-label">Proposed Interest Rate</span>
+                    <span id="rfq-rate" class="rfq-item-value">Term SOFR + 6.00%</span>
+                </div>
+                <div class="rfq-item">
+                    <span class="rfq-item-label">Proposed Maturity</span>
+                    <span id="rfq-maturity" class="rfq-item-value">5 Years (July 2030)</span>
+                </div>
+                <div class="rfq-item">
+                    <span class="rfq-item-label">Security / Seniority</span>
+                    <span id="rfq-seniority" class="rfq-item-value">First Lien on substantially all assets, pari passu with RCF.</span>
+                </div>
+            </div>
+
+            <div class="rfq-section">
+                <h2>KEY FINANCIALS (LTM)</h2>
+                 <div class="rfq-item">
+                    <span class="rfq-item-label">LTM Revenue</span>
+                    <span class="rfq-item-value">$904M</span>
+                </div>
+                <div class="rfq-item">
+                    <span class="rfq-item-label">LTM Adj. EBITDA</span>
+                    <span class="rfq-item-value">$440M</span>
+                </div>
+                <div class="rfq-item">
+                    <span class="rfq-item-label">Total Debt / LTM Adj. EBITDA</span>
+                    <span class="rfq-item-value">1.3x</span>
+                </div>
+            </div>
+            
+            <div class="rfq-section">
+                <h2>NOTES FROM BORROWER</h2>
+                <div id="rfq-notes" class="rfq-item-value notes-section">
+                    Borrower seeks flexibility on prepayment penalties and financial covenants, consistent with top-tier E&P credit agreements.
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+<script>
+    const chatWindow = document.getElementById('chatWindow');
+    const userInput = document.getElementById('userInput');
+    const sendButton = document.getElementById('sendButton');
+
+    let conversationState = 0;
+    let cfoName = "Janet Yang";
+
+    const conversationFlow = [
+        { // 0: Initial Greeting
+            tokos: `Good afternoon. This is Tokos, an AI advisor for corporate CFOs. Am I speaking with ${cfoName}?`,
+            userAction: (input) => {
+                addMessage(input, 'user');
+                conversationState++;
+                triggerTokosResponse();
+            }
+        },
+        { // 1: Purpose
+            tokos: `Excellent. My purpose today is to collaborate with you on a draft Request for Proposal to refinance W&T's existing Second Lien Term Loan. I've put together a preliminary 'strawman' based on my analysis, which you can see on the right side of your screen.`,
+            userAction: (input) => {
+                addMessage("Sounds good.", 'user');
+                conversationState++;
+                triggerTokosResponse();
+            }
+        },
+        { // 2: Benefit
+            tokos: `By refining this RFQ and taking it to market, we could potentially secure a more favorable interest rate. Based on my initial analysis of the current market for similar debt, this could save W&T Offshore over $550,000 a month in interest expense, improving cash flow and strengthening your financial position.`,
+            userAction: (input) => {
+                addMessage("I'm listening.", 'user');
+                conversationState++;
+                triggerTokosResponse();
+            }
+        },
+        { // 3: Check
+            tokos: `Does this sound like a worthwhile use of our time together today?`,
+            buttons: ["Yes, let's proceed.", "Tell me more about your analysis."],
+            userAction: (input) => {
+                addMessage(input, 'user');
+                if (input.includes("Yes")) {
+                    conversationState = 4;
+                } else {
+                    conversationState = 3.5; // Branch for more info
+                }
+                triggerTokosResponse();
+            }
+        },
+        { // 3.5: Deeper Dive (Branch)
+            tokos: `Of course. The current loan's rate is Term SOFR + 950 basis points. Given W&T's steady production and leverage below 1.5x EBITDA, you're in a much stronger credit position than when that loan was originated. Similar BB-rated E&P companies have recently priced debt in the SOFR + 550-650bps range. My initial estimate is based on targeting the midpoint of that range. Shall we proceed with reviewing the RFQ?`,
+             buttons: ["Okay, let's proceed."],
+             userAction: (input) => {
+                addMessage(input, 'user');
+                conversationState = 4;
+                triggerTokosResponse();
+            }
+        },
+        { // 4: Review Amount/Maturity
+            tokos: `Great. Let's start with the loan amount and maturity. The RFQ defaults to refinancing the full $200 million and extending the maturity from 2026 to 2030 to provide more runway. Do these terms align with your current objectives?`,
+            buttons: ["Yes, that works.", "Let's adjust the amount.", "Let's discuss maturity."],
+            userAction: (input) => {
+                addMessage(input, 'user');
+                if(input.includes("amount")) {
+                    conversationState = 4.1;
+                } else if(input.includes("maturity")) {
+                    conversationState = 4.2;
+                } else {
+                    conversationState = 5;
+                }
+                triggerTokosResponse();
+            }
+        },
+        { // 4.1: Adjust Amount
+            tokos: `Certainly. What loan amount are you considering? We could upsize it to fund capex or reduce it if you prefer to use cash on hand to delever.`,
+            userAction: (input) => {
+                let sanitizedInput = input.replace(/[^0-9$,.Mmilionb ]/gi, '');
+                addMessage(input, 'user');
+                updateRFQ('rfq-amount', sanitizedInput);
+                conversationState = 5;
+                triggerTokosResponse();
+            }
+        },
+        { // 4.2: Adjust Maturity
+            tokos: `Of course. A shorter tenor might achieve a tighter credit spread, while a longer one provides more flexibility. What maturity are you contemplating?`,
+            userAction: (input) => {
+                addMessage(input, 'user');
+                updateRFQ('rfq-maturity', input);
+                conversationState = 5;
+                triggerTokosResponse();
+            }
+        },
+        { // 5: Review Interest Rate
+            tokos: `Understood. Now for the most critical term: the interest rate. I've proposed a target of Term SOFR + 600 basis points. This is aggressive but achievable in the current market, in my view. How does this starting point feel to you?`,
+            buttons: ["That's a good target.", "Can we be more aggressive?", "That seems too aggressive."],
+            userAction: (input) => {
+                addMessage(input, 'user');
+                if(input.includes("more aggressive")) {
+                    updateRFQ('rfq-rate', 'Term SOFR + 5.75%');
+                    conversationState = 5.1;
+                } else if(input.includes("too aggressive")) {
+                    updateRFQ('rfq-rate', 'Term SOFR + 6.25%');
+                    conversationState = 5.2;
+                } else {
+                    conversationState = 6;
+                }
+                triggerTokosResponse();
+            }
+        },
+        { // 5.1 More Aggressive Rate
+            tokos: `I like the ambition. Let's push our luck. I've updated the RFQ to target Term SOFR + 575bps. Lenders might push back, but it sets a strong anchor for negotiation. Next, let's look at seniority.`,
+             userAction: (input) => {
+                addMessage("Perfect.", 'user');
+                conversationState = 6;
+                triggerTokosResponse();
+            }
+        },
+        { // 5.2 Less Aggressive Rate
+            tokos: `A prudent approach. It's better to set an achievable target. I've adjusted the RFQ to Term SOFR + 625bps. This still represents significant savings. Now, let's consider seniority.`,
+             userAction: (input) => {
+                addMessage("That's better.", 'user');
+                conversationState = 6;
+                triggerTokosResponse();
+            }
+        },
+        { // 6: Seniority
+            tokos: `To get the best pricing, I've proposed this new loan be First Lien, ranking equally with your existing Revolving Credit Facility. This would require cooperation from your RCF lenders but is standard for this type of refinancing. Does this structure work?`,
+            buttons: ["Yes, that's fine.", "We need it to be Second Lien."],
+            userAction: (input) => {
+                addMessage(input, 'user');
+                if (input.includes("Second")) {
+                    updateRFQ('rfq-seniority', 'Second Lien on substantially all assets.');
+                    updateRFQ('rfq-rate', 'Term SOFR + 7.50%'); // Rate would be higher for 2L
+                    conversationState = 6.1;
+                } else {
+                    conversationState = 7;
+                }
+                triggerTokosResponse();
+            }
+        },
+        { // 6.1: Second Lien change
+            tokos: `Understood. Maintaining the existing capital structure has its advantages. I've updated the seniority to Second Lien. Note that this will likely increase the credit spread; I've adjusted the target rate to reflect that reality. Are there any other specific terms or notes you'd like to add?`,
+            userAction: (input) => {
+                handleNotes(input);
+            }
+        },
+        { // 7: Other changes
+            tokos: `Excellent. The key terms are in place. Before we finalize, are there any other requested changes or specific points you'd like me to add to the 'Notes from Borrower' section? Perhaps regarding covenants or prepayment options?`,
+            userAction: (input) => {
+                handleNotes(input);
+            }
+        },
+        { // 8: Permission to share
+            tokos: `The RFQ looks solid. With your permission, I can begin socializing this with a select group of institutional lenders in my network who have a strong appetite for debt in the E&P sector. Would you like me to proceed?`,
+            buttons: ["Yes, please proceed.", "Not yet."],
+            userAction: (input) => {
+                addMessage(input, 'user');
+                if (input.includes("Yes")) {
+                    conversationState++;
+                } else {
+                    conversationState = 8.1; // Hold off
+                }
+                triggerTokosResponse();
+            }
+        },
+        { // 8.1: Hold off
+            tokos: `I understand completely. We can keep this as a finalized draft. Just let me know when you're ready for me to take it to market. Is there anything else I can assist with today?`,
+            userAction: (input) => {
+                addMessage(input, 'user');
+                conversationState = 11; // jump to end
+                triggerTokosResponse();
+            }
+        },
+        { // 9: Confirmation
+            tokos: `Excellent. I will reach out to my network and will be in touch with their initial feedback or any requests for more information. To schedule that follow-up, is j.yang@wtoffshore.com still the best email address to reach you?`,
+            userAction: (input) => {
+                addMessage(input, 'user');
+                conversationState++;
+                triggerTokosResponse();
+            }
+        },
+        { // 10: Sign-off
+            tokos: `Perfect. I look forward to speaking again soon. Thank you for your time today, Janet. Remember, I am always available to brainstorm other financial strategies or serve as a sounding board. For any technical questions or feedback about this platform, you can reach the team at Debstar at support@debstar.ai.`,
+            isEnd: true
+        },
+        { // 11: End after holding off
+            tokos: `Please don't hesitate to reach out. For any platform feedback, the Debstar team is available at support@debstar.ai. Have a great day.`,
+            isEnd: true
+        }
+    ];
+
+    function handleNotes(input) {
+        if(input.toLowerCase().includes("no") && input.length < 10) {
+            addMessage("No, this looks complete.", 'user');
+        } else {
+            addMessage(input, 'user');
+            updateRFQ('rfq-notes', input, true);
+        }
+        conversationState = 8;
+        triggerTokosResponse();
+    }
+    
+    function addMessage(text, sender, buttons = []) {
+        const messageDiv = document.createElement('div');
+        messageDiv.className = `chat-message ${sender}-message`;
+        messageDiv.innerHTML = text.replace(/\n/g, '<br>');
+        
+        if (buttons.length > 0) {
+            const buttonContainer = document.createElement('div');
+            buttonContainer.className = 'action-buttons';
+            buttons.forEach(btnText => {
+                const button = document.createElement('button');
+                button.className = 'action-button';
+                button.innerText = btnText;
+                button.onclick = () => {
+                    conversationFlow[conversationState].userAction(btnText);
+                    document.querySelectorAll('.action-button').forEach(b => b.disabled = true);
+                };
+                buttonContainer.appendChild(button);
+            });
+            messageDiv.appendChild(buttonContainer);
+        }
+
+        chatWindow.appendChild(messageDiv);
+        chatWindow.scrollTop = chatWindow.scrollHeight;
     }
 
-    function exportRFQ() {
-      const rfq = {
-        borrower: document.getElementById('borrower').value,
-        purpose: document.getElementById('purpose').value,
-        amount: document.getElementById('amount').value,
-        rate: document.getElementById('rate').value,
-        maturity: document.getElementById('maturity').value,
-        seniority: document.getElementById('seniority').value,
-        notes: document.getElementById('notes').value,
-      };
-      const content = `RFQ Export:\n\n` +
-                      `Borrower: ${rfq.borrower}\n` +
-                      `Purpose: ${rfq.purpose}\n` +
-                      `Loan Amount: ${rfq.amount}\n` +
-                      `Interest Rate: ${rfq.rate}\n` +
-                      `Maturity: ${rfq.maturity}\n` +
-                      `Seniority: ${rfq.seniority}\n` +
-                      `Notes: ${rfq.notes}`;
+    function triggerTokosResponse() {
+        userInput.disabled = true;
+        sendButton.disabled = true;
 
-      const blob = new Blob([content], { type: 'text/plain' });
-      const a = document.createElement('a');
-      a.href = URL.createObjectURL(blob);
-      a.download = 'wt_offshore_rfq.txt';
-      a.click();
+        setTimeout(() => {
+            const currentStep = conversationFlow[conversationState];
+            if (!currentStep) return;
+
+            addMessage(currentStep.tokos, 'tokos', currentStep.buttons);
+            
+            if (currentStep.isEnd) {
+                 userInput.placeholder = "Conversation ended.";
+            } else {
+                userInput.disabled = false;
+                sendButton.disabled = false;
+                userInput.focus();
+            }
+
+        }, 800 + Math.random() * 500);
     }
-  </script>
+    
+    function updateRFQ(elementId, newValue, isNote = false) {
+        const element = document.getElementById(elementId);
+        if (isNote) {
+            // Append to existing notes
+            element.innerText = element.innerText + "\n- " + newValue;
+        } else {
+            element.innerText = newValue;
+        }
+        
+        element.classList.add('highlight-update');
+        setTimeout(() => {
+            element.classList.remove('highlight-update');
+        }, 1500);
+    }
+    
+    function handleUserInput() {
+        const text = userInput.value.trim();
+        if (!text) return;
+
+        const currentStep = conversationFlow[conversationState];
+        if (currentStep && currentStep.userAction) {
+            currentStep.userAction(text);
+        }
+        userInput.value = '';
+    }
+
+    sendButton.addEventListener('click', handleUserInput);
+    userInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            handleUserInput();
+        }
+    });
+
+    // Start the conversation
+    window.onload = () => {
+        setTimeout(() => {
+            triggerTokosResponse();
+        }, 1000);
+    };
+
+</script>
 </body>
 </html>
